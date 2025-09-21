@@ -1,4 +1,6 @@
 import tkinter as tk
+import functions as fun
+
 
 class PCMeter_GUI:
     
@@ -25,17 +27,20 @@ class PCMeter_GUI:
 
 
         
-
-        self.checkbox_cpu=tk.Checkbutton(self.checkbox_readings_frame, text="read cpu usage", font=("Arial",10))
+        self.check_state_cpu=tk.IntVar()
+        self.checkbox_cpu=tk.Checkbutton(self.checkbox_readings_frame, text="read cpu usage", font=("Arial",10), variable=self.check_state_cpu)
         self.checkbox_cpu.grid(row=0,column=0, sticky=tk.W+tk.E)
 
-        self.checkbox_gpu=tk.Checkbutton(self.checkbox_readings_frame, text="read gpu usage", font=("Arial",10))
+        self.check_state_gpu=tk.IntVar()
+        self.checkbox_gpu=tk.Checkbutton(self.checkbox_readings_frame, text="read gpu usage", font=("Arial",10), variable=self.check_state_gpu)
         self.checkbox_gpu.grid(row=0,column=1, sticky=tk.W+tk.E)
 
-        self.checkbox_ram=tk.Checkbutton(self.checkbox_readings_frame, text="read ram usage", font=("Arial",10))
+        self.check_state_ram=tk.IntVar()
+        self.checkbox_ram=tk.Checkbutton(self.checkbox_readings_frame, text="read ram usage", font=("Arial",10), variable=self.check_state_ram)
         self.checkbox_ram.grid(row=0,column=2, sticky=tk.W+tk.E)
 
-        self.checkbox_disc=tk.Checkbutton(self.checkbox_readings_frame, text="read disc usage", font=("Arial",10))
+        self.check_state_disc=tk.IntVar()
+        self.checkbox_disc=tk.Checkbutton(self.checkbox_readings_frame, text="read disc usage", font=("Arial",10), variable=self.check_state_disc)
         self.checkbox_disc.grid(row=0,column=3, sticky=tk.W+tk.E)
 
 
@@ -56,16 +61,20 @@ class PCMeter_GUI:
         self.checkbox_options_frame.columnconfigure(3,weight=1)
 
 
-        self.checkbox_log=tk.Checkbutton(self.checkbox_options_frame, text="write to log file", font=("Arial",10))
+        self.check_state_log=tk.IntVar()
+        self.checkbox_log=tk.Checkbutton(self.checkbox_options_frame, text="custom log file path", font=("Arial",10), variable=self.check_state_log)
         self.checkbox_log.grid(row=0,column=0, sticky=tk.W+tk.E)
 
-        self.checkbox_system_info=tk.Checkbutton(self.checkbox_options_frame, text="show system info in log file", font=("Arial",10))
+        self.check_state_sinfo=tk.IntVar()
+        self.checkbox_system_info=tk.Checkbutton(self.checkbox_options_frame, text="show system info in log file", font=("Arial",10), variable=self.check_state_sinfo)
         self.checkbox_system_info.grid(row=0,column=1, sticky=tk.W+tk.E)
 
-        self.checkbox_time_inverval=tk.Checkbutton(self.checkbox_options_frame, text="choose own time interval", font=("Arial",10))
+        self.check_state_tinterval=tk.IntVar()
+        self.checkbox_time_inverval=tk.Checkbutton(self.checkbox_options_frame, text="choose own time interval", font=("Arial",10), variable=self.check_state_tinterval)
         self.checkbox_time_inverval.grid(row=0,column=2, sticky=tk.W+tk.E)
 
-        self.checkbox_work_time=tk.Checkbutton(self.checkbox_options_frame, text="choose own work time", font=("Arial",10))
+        self.check_state_wtime=tk.IntVar()
+        self.checkbox_work_time=tk.Checkbutton(self.checkbox_options_frame, text="choose own work time", font=("Arial",10), variable=self.check_state_wtime)
         self.checkbox_work_time.grid(row=0,column=3, sticky=tk.W+tk.E)
 
         #options header
@@ -75,7 +84,17 @@ class PCMeter_GUI:
         self.checkbox_options_frame.pack(fill="x", padx=10, pady=10)
 
 
+        self.start_button=tk.Button(self.root, text="Start reading", font=("Arial Black",20), command=self.start_reading)
+        self.start_button.pack(padx=10, pady=50)
+
         self.root.mainloop()
     
+
+    def start_reading(self):
+        #log file without customized pathing is being created in same path as .exe file
+        if self.check_state_cpu.get() == 1:
+            print("pom")
+        elif self.check_state_cpu.get() == 0:
+            print("niepom")
 
 PCMeter_GUI()
