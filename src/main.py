@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import simpledialog
 import functions as fun
 
 
@@ -92,9 +93,18 @@ class PCMeter_GUI:
 
     def start_reading(self):
         #log file without customized pathing is being created in same path as .exe file
-        if self.check_state_cpu.get() == 1:
-            print("pom")
-        elif self.check_state_cpu.get() == 0:
+
+
+        if self.check_state_log.get() == 1:
+            self.custom_path=simpledialog.askstring("","Enter custom log file path")
+            if self.custom_path:
+                self.log_file_path=self.custom_path.join("log.txt")
+                with open(self.log_file_path,"a") as log:
+                    log.write("test")
+
+            else:
+                print("123123")
+        elif self.check_state_log.get() == 0:
             print("niepom")
 
 PCMeter_GUI()
