@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import simpledialog
+from tkinter import simpledialog, messagebox
 import functions as fun
 
 
@@ -92,19 +92,53 @@ class PCMeter_GUI:
     
 
     def start_reading(self):
+        #main reading function
+        if not self.check_state_cpu or self.check_state_disc or self.check_state_gpu or self.check_state_ram:
+            self.no_reading_selected_warning="No reading selected"
+            self.show_warning(self.no_reading_selected_warning)
+            return
+        self.log_file=self.create_log_file()
+
+    def create_log_file(self):
         #log file without customized pathing is being created in same path as .exe file
 
 
         if self.check_state_log.get() == 1:
+
             self.custom_path=simpledialog.askstring("","Enter custom log file path")
+
             if self.custom_path:
-                self.log_file_path=self.custom_path.join("log.txt")
+
+                
+                if self.custom_path.endswith("\\"):
+                    self.log_file_path=self.custom_path+"log.txt"
+
+                else:
+                    self.log_file_path=self.custom_path+"\log.txt"                                 
+
+
                 with open(self.log_file_path,"a") as log:
-                    log.write("test")
+                    return log
 
             else:
-                print("123123")
+
+                self.custom_path_checked_but_no_info="Custom path checked but no path given"
+                self.show_message(self.custom_path_checked_but_no_info)
+
+
+
+
         elif self.check_state_log.get() == 0:
-            print("niepom")
+
+            with open("log.txt","a") as log:
+                return log
+            
+    def show_message(self, message):
+        #function used for showing info
+        messagebox.showinfo(title="PCMeter", message=message)
+
+    def show_warning(self, warning):
+        #function used for showing warnings
+        messagebox.showwarning(title="PCMeter", message=warning)
 
 PCMeter_GUI()
