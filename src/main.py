@@ -94,17 +94,18 @@ class PCMeter_GUI:
 
     def start_reading(self):
         #main reading function
-        if not self.check_state_cpu or self.check_state_disc or self.check_state_gpu or self.check_state_ram:
+        if not self.check_state_cpu or not self.check_state_disc or not self.check_state_gpu or not self.check_state_ram:
             self.no_reading_selected_warning="No reading selected"
             self.show_warning(self.no_reading_selected_warning)
             return
         self.log_file=self.create_log_file()
-
+        self.log_file.write("asdasd")
         if self.log_file==0:
             self.show_message("Readings stopped")
+            return
 
         if self.check_state_sinfo:
-            self.log_file.write(fun.show_system_info())
+            self.print_to_log_file(message=fun.show_system_info())
 
 
         #if work time not defined, it is defined to one iteration only
@@ -115,9 +116,13 @@ class PCMeter_GUI:
             self.work_time=0
 
         #if not self.work_time:
-            
-    def print_to_log_file(self, log_file, message):
-        log_file.write(message)
+
+
+    def print_to_log_file(self, message):
+        #basic log writing method
+
+        with open(self.log_file,"a") as log:
+            log.write(message)
 
     def create_log_file(self):
         #log file without customized pathing is being created in same path as .exe file
