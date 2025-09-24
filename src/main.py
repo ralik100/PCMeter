@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import simpledialog, messagebox
+import os
 import functions as fun
 
 
@@ -99,6 +100,25 @@ class PCMeter_GUI:
             return
         self.log_file=self.create_log_file()
 
+        if self.log_file==0:
+            self.show_message("Readings stopped")
+
+        if self.check_state_sinfo:
+            self.log_file.write(fun.show_system_info())
+
+
+        #if work time not defined, it is defined to one iteration only
+
+        if self.check_state_wtime:
+            self.work_time=simpledialog.askinteger("","Enter custom work time duration")
+        else:
+            self.work_time=0
+
+        #if not self.work_time:
+            
+    def print_to_log_file(self, log_file, message):
+        log_file.write(message)
+
     def create_log_file(self):
         #log file without customized pathing is being created in same path as .exe file
 
@@ -117,6 +137,9 @@ class PCMeter_GUI:
                     self.log_file_path=self.custom_path+"\log.txt"                                 
 
 
+                if os.path.exists(self.log_file_path):
+                    self.show_warning("Log file already exists in this path!")
+                    return 0
                 with open(self.log_file_path,"a") as log:
                     return log
 

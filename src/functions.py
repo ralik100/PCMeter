@@ -12,3 +12,6 @@ def ram_usage():
 def disc_usage():
 
     return psutil.disk_usage('/').percent
+
+def show_system_info():
+    return "test"
