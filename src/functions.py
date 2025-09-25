@@ -1,8 +1,12 @@
 import psutil
+import datetime
 
 def cpu_usage(interval):
 
-    return psutil.cpu_times_percent(interval)
+    time=datetime.datetime.now()
+    x=psutil.cpu_percent(interval)
+
+    return f"{time} ||| CPU usage: {x}%."
 
 def ram_usage():
 
@@ -14,4 +18,9 @@ def disc_usage():
     return psutil.disk_usage('/').percent
 
 def show_system_info():
+
     return "test"
+
+def gpu_usage():
+    #wip
+    return "gpu"

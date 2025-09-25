@@ -92,37 +92,66 @@ class PCMeter_GUI:
         self.root.mainloop()
     
 
+
+
+
     def start_reading(self):
         #main reading function
-        if not self.check_state_cpu or not self.check_state_disc or not self.check_state_gpu or not self.check_state_ram:
+
+        if  not self.check_state_cpu.get() and not self.check_state_disc.get() and not self.check_state_gpu.get() and not self.check_state_ram.get():
             self.no_reading_selected_warning="No reading selected"
             self.show_warning(self.no_reading_selected_warning)
             return
+        
         self.log_file=self.create_log_file()
-        self.log_file.write("asdasd")
+
+        
+
         if self.log_file==0:
             self.show_message("Readings stopped")
             return
 
-        if self.check_state_sinfo:
-            self.print_to_log_file(message=fun.show_system_info())
+        if self.check_state_sinfo.get():
+            self.print_to_log_file(log_file=self.log_file, message=fun.show_system_info())
+
+
 
 
         #if work time not defined, it is defined to one iteration only
 
-        if self.check_state_wtime:
-            self.work_time=simpledialog.askinteger("","Enter custom work time duration")
+        if self.check_state_wtime.get():
+            self.work_time=simpledialog.askinteger("","Enter custom work time duration in seconds")
         else:
             self.work_time=0
 
-        #if not self.work_time:
+        self.checked_readings=[self.check_state_cpu.get(), self.check_state_gpu.get(), self.check_state_ram.get(), self.check_state_disc.get()]
+        if not self.work_time:
+            self.print_readings(self.checked_readings, self.log_file)
 
 
-    def print_to_log_file(self, message):
+
+        if self.log_file:
+            self.log_file.close()
+
+
+
+    def print_readings(self, readings, log_file):
+        self.functions=[fun.cpu_usage(1), fun.gpu_usage(), fun.ram_usage(), fun.disc_usage()]
+        for i in range(4):
+            if readings[i]==1:
+                self.x=self.functions[i]
+                self.y=self.x
+                log_file.write(str(self.y)+"\n")
+
+
+
+    def print_to_log_file(self,log_file, message):
         #basic log writing method
 
-        with open(self.log_file,"a") as log:
-            log.write(message)
+        log_file.write(message)
+
+
+
 
     def create_log_file(self):
         #log file without customized pathing is being created in same path as .exe file
@@ -145,8 +174,9 @@ class PCMeter_GUI:
                 if os.path.exists(self.log_file_path):
                     self.show_warning("Log file already exists in this path!")
                     return 0
-                with open(self.log_file_path,"a") as log:
-                    return log
+                
+                log= open(self.log_file_path,"a")
+                return log
 
             else:
 
@@ -158,15 +188,28 @@ class PCMeter_GUI:
 
         elif self.check_state_log.get() == 0:
 
-            with open("log.txt","a") as log:
-                return log
+            if os.path.exists("//log.txt"):
+                    self.show_warning("Log file already exists in this path!")
+                    return 0
             
+            log=open("log.txt","a")
+            return log
+            
+
+
+
     def show_message(self, message):
         #function used for showing info
         messagebox.showinfo(title="PCMeter", message=message)
 
+
+
+
     def show_warning(self, warning):
         #function used for showing warnings
         messagebox.showwarning(title="PCMeter", message=warning)
+
+
+
 
 PCMeter_GUI()
