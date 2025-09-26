@@ -1,0 +1,15 @@
+2025-09-26 21:39:49.426174 ||| System information, file system=Windows, version=10.0.19045, CPU=AMD64 Family 23 Model 113 Stepping 0, AuthenticAMD, total RAM=17125937152, total disc=sdiskusage(total=255395442688, used=82575007744, free=172820434944, percent=32.3).
+2025-09-26 21:39:49.458021 ||| CPU usage: 0.0%.
+gpu
+2025-09-26 21:39:50.458381 ||| RAM usage: 56.1%.
+2025-09-26 21:39:50.461649 ||| Disc usage: 32.3%.
+2025-09-26 21:39:58.972275 ||| System information, file system=Windows, version=10.0.19045, CPU=AMD64 Family 23 Model 113 Stepping 0, AuthenticAMD, total RAM=17125937152, total disc=sdiskusage(total=255395442688, used=82575138816, free=172820303872, percent=32.3).
+2025-09-26 21:39:58.975662 ||| CPU usage: 0.0%.
+gpu
+2025-09-26 21:39:59.976134 ||| RAM usage: 56.2%.
+2025-09-26 21:39:59.979330 ||| Disc usage: 32.3%.
+2025-09-26 21:40:01.334306 ||| System information, file system=Windows, version=10.0.19045, CPU=AMD64 Family 23 Model 113 Stepping 0, AuthenticAMD, total RAM=17125937152, total disc=sdiskusage(total=255395442688, used=82575142912, free=172820299776, percent=32.3).
+2025-09-26 21:40:01.337719 ||| CPU usage: 8.3%.
+gpu
+2025-09-26 21:40:02.338001 ||| RAM usage: 56.1%.
+2025-09-26 21:40:02.341293 ||| Disc usage: 32.3%.

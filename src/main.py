@@ -72,12 +72,16 @@ class PCMeter_GUI:
         self.checkbox_system_info.grid(row=0,column=1, sticky=tk.W+tk.E)
 
         self.check_state_tinterval=tk.IntVar()
-        self.checkbox_time_inverval=tk.Checkbutton(self.checkbox_options_frame, text="choose own time interval", font=("Arial",10), variable=self.check_state_tinterval)
+        self.checkbox_time_inverval=tk.Checkbutton(self.checkbox_options_frame, text="choose own cpu time interval", font=("Arial",10), variable=self.check_state_tinterval)
         self.checkbox_time_inverval.grid(row=0,column=2, sticky=tk.W+tk.E)
 
         self.check_state_wtime=tk.IntVar()
         self.checkbox_work_time=tk.Checkbutton(self.checkbox_options_frame, text="choose own work time", font=("Arial",10), variable=self.check_state_wtime)
         self.checkbox_work_time.grid(row=0,column=3, sticky=tk.W+tk.E)
+
+        self.check_state_reading_interval=tk.IntVar()
+        self.checkbox_reading_interval=tk.Checkbutton(self.checkbox_options_frame, text="choose own reading interval", font=("Arial",10), variable=self.check_state_reading_interval)
+        self.checkbox_reading_interval.grid(row=1,column=0, sticky=tk.W+tk.E)
 
         #options header
         self.options_header=tk.Label(self.root, text="Select your options", font=("Arial Black",15))
