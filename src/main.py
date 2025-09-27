@@ -131,11 +131,13 @@ class PCMeter_GUI:
         self.checked_readings=[self.check_state_cpu.get(), self.check_state_gpu.get(), self.check_state_ram.get(), self.check_state_disc.get()]
         if not self.work_time:
             self.print_readings(self.checked_readings, self.log_file)
+        else:
+            if self.work_time<1:
+                self.show_warning("Custom work time should be more or equal 1")
 
 
 
-        if self.log_file:
-            self.log_file.close()
+        self.log_close(self.log_file)
 
 
 
@@ -148,6 +150,9 @@ class PCMeter_GUI:
                 log_file.write(str(self.y)+"\n")
 
 
+    def log_close(self, log_file):
+        if log_file:
+            log_file.close()
 
     def print_to_log_file(self,log_file, message):
         #basic log writing method
