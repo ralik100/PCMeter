@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import simpledialog, messagebox
 import os
 import functions as fun
+import time
 
 
 class PCMeter_GUI:
@@ -83,6 +84,10 @@ class PCMeter_GUI:
         self.checkbox_reading_interval=tk.Checkbutton(self.checkbox_options_frame, text="choose own reading interval", font=("Arial",10), variable=self.check_state_reading_interval)
         self.checkbox_reading_interval.grid(row=1,column=0, sticky=tk.W+tk.E)
 
+        self.check_state_clear_log_file=tk.IntVar()
+        self.checkbox_clear_log_file=tk.Checkbutton(self.checkbox_options_frame, text="clear log file if in the same path", font=("Arial",10), variable=self.check_state_clear_log_file)
+        self.checkbox_clear_log_file.grid(row=1,column=1, sticky=tk.W+tk.E)
+
         #options header
         self.options_header=tk.Label(self.root, text="Select your options", font=("Arial Black",15))
         self.options_header.pack(padx=5, pady=5)
@@ -107,14 +112,17 @@ class PCMeter_GUI:
             self.show_warning(self.no_reading_selected_warning)
             return
         
+        #creating logfile
         self.log_file=self.create_log_file()
 
         
-
+        #if creating log file went wrong, stop readings
         if self.log_file==0:
             self.show_message("Readings stopped")
             return
 
+
+        #showing system info
         if self.check_state_sinfo.get():
             self.print_to_log_file(log_file=self.log_file, message=fun.show_system_info())
 
@@ -128,15 +136,55 @@ class PCMeter_GUI:
         else:
             self.work_time=0
 
+        #list for checked readings, later necessary
         self.checked_readings=[self.check_state_cpu.get(), self.check_state_gpu.get(), self.check_state_ram.get(), self.check_state_disc.get()]
+
+        #without customized work time - designed to work once
         if not self.work_time:
             self.print_readings(self.checked_readings, self.log_file)
-        else:
-            if self.work_time<1:
-                self.show_warning("Custom work time should be more or equal 1")
+
+        #with customized work time
+        elif self.work_time>=1:
+
+            #get reading time interval
+            if self.check_state_reading_interval.get():
+                self.reading_interval=simpledialog.askinteger("","Enter reading interval in seconds")
+
+            #reading time interval should be more or equal 1
+                if self.reading_interval<1:
+                    self.show_warning("Reading interval should be more or equal to 1 second")
+                    return
+                
+            
+            #if not customized - designed to work every 2 seconds
+            else:
+                self.reading_interval=2
+                    
+            #blocking bigger interval than worktime situation
+            if self.reading_interval>self.work_time:
+                self.show_warning("Reading interval should be less or equal to work time")
+                return
+            
+
+            if self.work_time<2:
+                self.show_warning("Custom work time should be more or equal 2")
+                return
+            
+            #variable for timetracking
+            self.time_passed=0
 
 
+            #main loop for readings with customized work time
+            while self.time_passed<self.work_time:
+                self.print_readings(self.checked_readings, self.log_file)
+                self.time_passed+=self.reading_interval
+                time.sleep(self.reading_interval)
 
+
+           
+                    
+
+        #close logfile
         self.log_close(self.log_file)
 
 
@@ -152,6 +200,7 @@ class PCMeter_GUI:
 
     def log_close(self, log_file):
         if log_file:
+            self.print_to_log_file(log_file, "Readings finished successfully!")
             log_file.close()
 
     def print_to_log_file(self,log_file, message):
