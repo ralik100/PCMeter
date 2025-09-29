@@ -112,19 +112,42 @@ class PCMeter_GUI:
             self.show_warning(self.no_reading_selected_warning)
             return
         
+
+
+
+
         #creating logfile
         self.log_file=self.create_log_file()
 
         
+
+
+
+
         #if creating log file went wrong, stop readings
         if self.log_file==0:
             self.show_message("Readings stopped")
             return
 
 
+
+        #clearing log file if checked
+        if self.check_state_clear_log_file.get():
+            self.clear_log_file(self.log_file)
+
+
+
         #showing system info
         if self.check_state_sinfo.get():
             self.print_to_log_file(log_file=self.log_file, message=fun.show_system_info())
+
+
+
+
+
+
+        #list for checked readings, later necessary
+        self.checked_readings=[self.check_state_cpu.get(), self.check_state_gpu.get(), self.check_state_ram.get(), self.check_state_disc.get()]
 
 
 
@@ -136,12 +159,26 @@ class PCMeter_GUI:
         else:
             self.work_time=0
 
-        #list for checked readings, later necessary
-        self.checked_readings=[self.check_state_cpu.get(), self.check_state_gpu.get(), self.check_state_ram.get(), self.check_state_disc.get()]
+
+
+        #getting interval for cpu reading
+        if self.check_state_tinterval.get():
+            self.cpu_time_interval=simpledialog.askfloat("","Enter customized interval for CPU readings.")
+            if self.cpu_time_interval<=0:
+                self.show_warning("CPU reading interval should be more than 0!")
+                return
+        else:
+            self.cpu_time_interval=1
+
+
 
         #without customized work time - designed to work once
         if not self.work_time:
-            self.print_readings(self.checked_readings, self.log_file)
+            self.print_readings(self.checked_readings, self.log_file, self.cpu_time_interval)
+
+
+
+
 
         #with customized work time
         elif self.work_time>=1:
@@ -176,7 +213,7 @@ class PCMeter_GUI:
 
             #main loop for readings with customized work time
             while self.time_passed<self.work_time:
-                self.print_readings(self.checked_readings, self.log_file)
+                self.print_readings(self.checked_readings, self.log_file, self.cpu_time_interval)
                 self.time_passed+=self.reading_interval
                 time.sleep(self.reading_interval)
 
@@ -189,18 +226,24 @@ class PCMeter_GUI:
 
 
 
-    def print_readings(self, readings, log_file):
-        self.functions=[fun.cpu_usage(1), fun.gpu_usage(), fun.ram_usage(), fun.disc_usage()]
+    #basic function for printing readings to log file
+    def print_readings(self, readings, log_file, cpu_interval):
+
+
+        functions=[fun.cpu_usage(cpu_interval), fun.gpu_usage(), fun.ram_usage(), fun.disc_usage()]
         for i in range(4):
             if readings[i]==1:
-                self.x=self.functions[i]
-                self.y=self.x
-                log_file.write(str(self.y)+"\n")
+                x=functions[i]
+                y=x
+                self.print_to_log_file(log_file, str(y)+"\n")
 
+
+    def clear_log_file(self, log_file):
+        os.ftruncate(log_file.fileno(),0)
 
     def log_close(self, log_file):
         if log_file:
-            self.print_to_log_file(log_file, "Readings finished successfully!")
+            self.print_to_log_file(log_file, "Readings finished successfully!\n")
             log_file.close()
 
     def print_to_log_file(self,log_file, message):
@@ -229,9 +272,6 @@ class PCMeter_GUI:
                     self.log_file_path=self.custom_path+"\log.txt"                                 
 
 
-                if os.path.exists(self.log_file_path):
-                    self.show_warning("Log file already exists in this path!")
-                    return 0
                 
                 log= open(self.log_file_path,"a")
                 return log
@@ -245,10 +285,6 @@ class PCMeter_GUI:
 
 
         elif self.check_state_log.get() == 0:
-
-            if os.path.exists("//log.txt"):
-                    self.show_warning("Log file already exists in this path!")
-                    return 0
             
             log=open("log.txt","a")
             return log
