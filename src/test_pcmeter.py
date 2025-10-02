@@ -1,7 +1,7 @@
 import gui
 import functions as fun
 import time
-
+import io
 
 
 
@@ -70,3 +70,9 @@ def test_cpu_usage_work_time():
     end=time.time()
     time_elapsed=end-start
     assert 10.1 >= time_elapsed >= 9.9
+
+def test_gui_creating_log_file():
+    x_gui=gui.PCMeter_GUI
+    file=x_gui.create_log_file()
+    assert isinstance(file, io.TextIOWrapper)
+    file.close()
