@@ -2,6 +2,7 @@ import gui
 import functions as fun
 import time
 import io
+import os
 
 
 
@@ -72,7 +73,19 @@ def test_cpu_usage_work_time():
     assert 10.1 >= time_elapsed >= 9.9
 
 def test_gui_creating_log_file():
-    x_gui=gui.PCMeter_GUI
-    file=x_gui.create_log_file()
-    assert isinstance(file, io.TextIOWrapper)
+    app=gui.PCMeter_GUI()
+    file=app.create_log_file()
     file.close()
+    assert isinstance(file, io.TextIOWrapper)
+    
+
+
+def test_custom_log_file_path_no_backslash_given():
+    app=gui.PCMeter_GUI()
+    app.checkbox_log.select()
+    app.custom_path="C:\\PCMeter"
+    file=app.create_log_file()
+    file.close()
+    app.custom_path+="\\"
+    assert os.path.isfile(os.path.join(app.custom_path, "log.txt"))
+    

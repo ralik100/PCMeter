@@ -2,7 +2,8 @@ import gui
 
 
 def main():
-    gui.PCMeter_GUI
+    app=gui.PCMeter_GUI()
+    app.run()
 
 
 if __name__=="__main__":

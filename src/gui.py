@@ -98,11 +98,11 @@ class PCMeter_GUI:
         self.start_button=tk.Button(self.root, text="Start reading", font=("Arial Black",20), command=self.start_reading)
         self.start_button.pack(padx=10, pady=50)
 
-        self.root.mainloop()
     
 
 
-
+    def run(self):
+        self.root.mainloop()
 
     def start_reading(self):
         #main reading function
