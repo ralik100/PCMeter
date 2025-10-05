@@ -3,7 +3,7 @@ import functions as fun
 import time
 import io
 import os
-
+from unittest.mock import patch
 
 
 def test_cpu_usage():
@@ -80,21 +80,12 @@ def test_gui_creating_log_file():
     
 
 
-def test_custom_log_file_path_no_backslash_given():
+def test_custom_log_file_path(tmp_path):
     app=gui.PCMeter_GUI()
-    app.checkbox_log.select()
-    app.custom_path="C:\\PCMeter"
-    file=app.create_log_file()
-    file.close()
-    app.custom_path+="\\"
-    assert os.path.isfile(os.path.join(app.custom_path, "log.txt"))
-
-def test_custom_log_file_path_with_backslash_given():
-    app=gui.PCMeter_GUI()
-    app.checkbox_log.select()
-    app.custom_path="C:\\PCMeter\\"
-    file=app.create_log_file()
-    file.close()
-    assert os.path.isfile(os.path.join(app.custom_path, "log.txt"))
-
+    app.check_state_log.set(1)
+    with patch("tkinter.simpledialog.askstring", return_value=str(tmp_path)):
+        file=app.create_log_file()
+        file.close()
     
+    expected = os.path.join(str(tmp_path), "log.txt")
+    assert os.path.isfile(expected)

@@ -254,41 +254,25 @@ class PCMeter_GUI:
 
 
 
+
     def create_log_file(self):
-        #log file without customized pathing is being created in same path as .exe file
-
-
         if self.check_state_log.get() == 1:
-
-            self.custom_path=simpledialog.askstring("","Enter custom log file path")
+            self.custom_path = simpledialog.askstring("", "Enter custom log file path")
 
             if self.custom_path:
+                self.log_file_path = os.path.join(self.custom_path, "log.txt")
 
-                
-                if self.custom_path.endswith("\\"):
-                    self.log_file_path=self.custom_path+"log.txt"
+                os.makedirs(self.custom_path, exist_ok=True)
 
-                else:
-                    self.log_file_path=self.custom_path+"\log.txt"                                 
-
-
-                
-                log= open(self.log_file_path,"a")
-                return log
-
+                return open(self.log_file_path, "a")
             else:
-
-                self.custom_path_checked_but_no_info="Custom path checked but no path given"
+                self.custom_path_checked_but_no_info = "Custom path checked but no path given"
                 self.show_message(self.custom_path_checked_but_no_info)
-
-
-
+                return None
 
         elif self.check_state_log.get() == 0:
-            
-            log=open("log.txt","a")
-            return log
-            
+            self.log_file_path = "log.txt"
+            return open(self.log_file_path, "a")
 
 
 
