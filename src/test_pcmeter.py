@@ -88,4 +88,13 @@ def test_custom_log_file_path_no_backslash_given():
     file.close()
     app.custom_path+="\\"
     assert os.path.isfile(os.path.join(app.custom_path, "log.txt"))
+
+def test_custom_log_file_path_with_backslash_given():
+    app=gui.PCMeter_GUI()
+    app.checkbox_log.select()
+    app.custom_path="C:\\PCMeter\\"
+    file=app.create_log_file()
+    file.close()
+    assert os.path.isfile(os.path.join(app.custom_path, "log.txt"))
+
     
