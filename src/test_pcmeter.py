@@ -89,3 +89,24 @@ def test_custom_log_file_path(tmp_path):
     
     expected = os.path.join(str(tmp_path), "log.txt")
     assert os.path.isfile(expected)
+
+def test_custom_work_time():
+    app=gui.PCMeter_GUI()
+    app.check_state_wtime.set(1)
+    app.check_state_disc.set(1)
+    start=time.time()
+    with patch("tkinter.simpledialog.askinteger", return_value=10):
+        app.start_reading()
+    end=time.time()
+    time_passed=end-start
+    assert 10.1>=time_passed>=9.9
+
+def test_clear_log_file():
+    app=gui.PCMeter_GUI()
+    app.check_state_sinfo.set(1)
+    file=app.create_log_file()
+    app.start_reading()
+
+    app.clear_log_file(file)
+
+    assert file | 1 == 0
