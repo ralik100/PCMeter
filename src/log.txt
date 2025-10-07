@@ -1,0 +1,7 @@
+2025-10-07 23:07:19.876687 ||| System information: file system=Windows ||| version=10.0.19045 ||| CPU=AMD64 Family 23 Model 113 Stepping 0, AuthenticAMD ||| total RAM=17125937152 ||| total disc=sdiskusage(total=255395442688, used=75881201664, free=179514241024, percent=29.7).
+gpu
+gpu
+Readings finished successfully!
+2025-10-07 23:08:28.966116 ||| Disc usage: 29.7%.
+2025-10-07 23:08:31.968863 ||| Disc usage: 29.7%.
+Readings finished successfully!
