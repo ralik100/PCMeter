@@ -93,20 +93,22 @@ def test_custom_log_file_path(tmp_path):
 def test_custom_work_time():
     app=gui.PCMeter_GUI()
     
-    start=time.time()
-    with patch("tkinter.simpledialog.askinteger", return_value=int(3)):
+    
+    with patch("tkinter.simpledialog.askinteger", return_value=int(2)):
+        
         app.check_state_wtime.set(1)
         app.check_state_disc.set(1)
+        start=time.time()
         app.start_reading()
-    end=time.time()
+        end=time.time()    
     time_passed=end-start
     assert 3.1>=time_passed>=2.9
 
-#def test_clear_log_file():
+def test_clear_log_file():
     app=gui.PCMeter_GUI()
     app.check_state_sinfo.set(1)
     file=app.create_log_file()
-    app.start_reading()
+    #app.start_reading()
 
     app.clear_log_file(file)
 

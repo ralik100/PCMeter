@@ -212,7 +212,10 @@ class PCMeter_GUI:
 
 
             #main loop for readings with customized work time
-            while self.time_passed<self.work_time:
+            start=time.time()
+            end=time.time()
+            while end-start<self.work_time:
+                end=time.time()
                 self.print_readings(self.checked_readings, self.log_file, self.cpu_time_interval)
                 self.time_passed+=self.reading_interval
                 time.sleep(self.reading_interval)
