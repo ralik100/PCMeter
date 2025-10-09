@@ -193,9 +193,9 @@ class PCMeter_GUI:
                     return
                 
             
-            #if not customized - designed to work every 2 seconds
+            #if not customized - designed to work every second
             else:
-                self.reading_interval=2
+                self.reading_interval=1
                     
             #blocking bigger interval than worktime situation
             if self.reading_interval>self.work_time:
@@ -213,13 +213,16 @@ class PCMeter_GUI:
 
             #main loop for readings with customized work time
             start=time.time()
-            end=time.time()
-            while end-start<self.work_time:
+            
+            while True:
                 end=time.time()
+                time_passed=end-start
+                if time_passed>=self.work_time:
+                    break
+                
                 self.print_readings(self.checked_readings, self.log_file, self.cpu_time_interval)
-                self.time_passed+=self.reading_interval
-                time.sleep(self.reading_interval)
 
+                time.sleep(self.reading_interval)
 
            
                     
@@ -242,7 +245,8 @@ class PCMeter_GUI:
 
 
     def clear_log_file(self, log_file):
-        os.ftruncate(log_file.fileno(),0)
+        log_file.seek(0)
+        log_file.truncate()
 
     def log_close(self, log_file):
         if log_file:

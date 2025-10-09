@@ -94,22 +94,30 @@ def test_custom_work_time():
     app=gui.PCMeter_GUI()
     
     
-    with patch("tkinter.simpledialog.askinteger", return_value=int(2)):
+    with patch("tkinter.simpledialog.askinteger", return_value=int(4)):
         
         app.check_state_wtime.set(1)
         app.check_state_disc.set(1)
-        start=time.time()
+        start=time.perf_counter()
         app.start_reading()
-        end=time.time()    
+        end=time.perf_counter()    
     time_passed=end-start
-    assert 3.1>=time_passed>=2.9
+    
+    assert 4.1>=time_passed>=3.9
 
-def test_clear_log_file():
+def test_clear_log_file(tmp_path):
+
     app=gui.PCMeter_GUI()
-    app.check_state_sinfo.set(1)
-    file=app.create_log_file()
-    #app.start_reading()
+    app.check_state_log.set(1)
+    with patch("tkinter.simpledialog.askstring", return_value=str(tmp_path)):
+        file=app.create_log_file()
 
+    file.write("Test_message")
+    
     app.clear_log_file(file)
+    file.close()
 
-    assert file | 1 == 0
+    assert os.path.getsize(app.log_file_path)==0
+
+
+    
