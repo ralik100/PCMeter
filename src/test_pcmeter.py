@@ -120,4 +120,11 @@ def test_clear_log_file(tmp_path):
     assert os.path.getsize(app.log_file_path)==0
 
 
+def test_show_message():
+    app=gui.PCMeter_GUI()
+    with patch("tkinter.messagebox.showinfo") as mock_message:
+        app.show_message("Test")
+
+        mock_message.assert_called_once_with(title="PCMeter", message="Test")
+
     

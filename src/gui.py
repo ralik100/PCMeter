@@ -274,7 +274,7 @@ class PCMeter_GUI:
                 return open(self.log_file_path, "a")
             else:
                 self.custom_path_checked_but_no_info = "Custom path checked but no path given"
-                self.show_message(self.custom_path_checked_but_no_info)
+                self.show_warning(self.custom_path_checked_but_no_info)
                 return None
 
         elif self.check_state_log.get() == 0:
