@@ -123,8 +123,15 @@ def test_clear_log_file(tmp_path):
 def test_show_message():
     app=gui.PCMeter_GUI()
     with patch("tkinter.messagebox.showinfo") as mock_message:
-        app.show_message("Test")
+        app.show_message("Test data")
 
-        mock_message.assert_called_once_with(title="PCMeter", message="Test")
+        mock_message.assert_called_once_with(title="PCMeter", message="Test data")
+
+def test_show_warning():
+    app=gui.PCMeter_GUI()
+    with patch("tkinter.messagebox.showwarning") as mock_message:
+        app.show_warning("Test data")
+
+        mock_message.assert_called_once_with(title="PCMeter", message="Test data")
 
     

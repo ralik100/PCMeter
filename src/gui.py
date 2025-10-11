@@ -164,7 +164,7 @@ class PCMeter_GUI:
         #getting interval for cpu reading
         if self.check_state_tinterval.get():
             self.cpu_time_interval=simpledialog.askfloat("","Enter customized interval for CPU readings.")
-            if self.cpu_time_interval<=0:
+            if self.cpu_time_interval==None or self.cpu_time_interval<=0 :
                 self.show_warning("CPU reading interval should be more than 0!")
                 return
         else:
