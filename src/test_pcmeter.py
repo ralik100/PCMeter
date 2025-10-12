@@ -134,4 +134,26 @@ def test_show_warning():
 
         mock_message.assert_called_once_with(title="PCMeter", message="Test data")
 
-    
+
+def test_print_to_log_file(tmp_path):
+    app=gui.PCMeter_GUI()
+    with patch("tkinter.simpledialog.askstring", return_value=str(tmp_path)):
+        app.check_state_log.set(1)
+        file=app.create_log_file()
+        app.print_to_log_file(file, "Test Data")
+        file.close()
+        log_file_path=tmp_path / "log.txt"
+        with open(log_file_path, "r") as f:
+            data=f.read()
+            assert data=="Test Data"
+
+def test_log_file_close_end_message(tmp_path):
+    app=gui.PCMeter_GUI()
+    with patch("tkinter.simpledialog.askstring", return_value=str(tmp_path)):
+        app.check_state_log.set(1)
+        file=app.create_log_file()
+        app.log_close(file)
+        log_file_path=tmp_path / "log.txt"
+        with open(log_file_path, "r") as f:
+            data=f.read()
+            assert data=="Readings finished successfully!\n"
