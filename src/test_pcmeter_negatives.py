@@ -52,3 +52,26 @@ def test_customized_cpu_reading_interval_no_value():
             app.start_reading()
 
             mock_warning.assert_called_once_with(title="PCMeter", message="CPU reading interval should be more than 0!")
+
+def test_customized_work_time_wrong_value():
+    app = gui.PCMeter_GUI()
+
+    with patch("tkinter.simpledialog.askinteger", return_value=int(0)):
+        with patch("tkinter.messagebox.showwarning") as mock_warning:
+            app.check_state_wtime.set(1)
+            app.check_state_disc.set(1)
+            app.start_reading()
+
+            mock_warning.assert_called_once_with(title="PCMeter", message="Custom work time should be more or equal 2")
+
+def test_customized_work_time_no_value():
+    app = gui.PCMeter_GUI()
+
+    with patch("tkinter.simpledialog.askinteger", return_value=None):
+        with patch("tkinter.messagebox.showwarning") as mock_warning:
+            app.check_state_wtime.set(1)
+            app.check_state_disc.set(1)
+            app.start_reading()
+
+            mock_warning.assert_called_once_with(title="PCMeter", message="Custom work time should be more or equal 2")
+

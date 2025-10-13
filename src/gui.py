@@ -203,7 +203,7 @@ class PCMeter_GUI:
                 return
             
 
-            if self.work_time<2:
+            if self.work_time==None or self.work_time<2:
                 self.show_warning("Custom work time should be more or equal 2")
                 return
             
