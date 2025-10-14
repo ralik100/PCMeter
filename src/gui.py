@@ -156,8 +156,7 @@ class PCMeter_GUI:
 
         if self.check_state_wtime.get():
             self.work_time=simpledialog.askinteger("","Enter custom work time duration in seconds")
-        else:
-            self.work_time=0
+        
 
 
 
@@ -173,7 +172,7 @@ class PCMeter_GUI:
 
 
         #without customized work time - designed to work once
-        if not self.work_time:
+        if  not self.check_state_wtime.get():
             self.print_readings(self.checked_readings, self.log_file, self.cpu_time_interval)
 
 
@@ -181,7 +180,13 @@ class PCMeter_GUI:
 
 
         #with customized work time
-        elif self.work_time>=1:
+        elif self.check_state_wtime.get():
+
+            self.work_time=simpledialog.askinteger("","Enter custom work time duration in seconds")
+
+            if self.work_time==None or self.work_time<2:
+                self.show_warning("Custom work time should be more or equal 2")
+                return
 
             #get reading time interval
             if self.check_state_reading_interval.get():
@@ -203,9 +208,6 @@ class PCMeter_GUI:
                 return
             
 
-            if self.work_time==None or self.work_time<2:
-                self.show_warning("Custom work time should be more or equal 2")
-                return
             
             #variable for timetracking
             self.time_passed=0
@@ -223,6 +225,10 @@ class PCMeter_GUI:
                 self.print_readings(self.checked_readings, self.log_file, self.cpu_time_interval)
 
                 time.sleep(self.reading_interval)
+            
+        else:
+            self.show_warning("Custom work time should be more or equal 2")
+            return
 
            
                     
