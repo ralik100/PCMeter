@@ -75,3 +75,16 @@ def test_customized_work_time_no_value():
 
             mock_warning.assert_called_once_with(title="PCMeter", message="Custom work time should be more or equal 2")
 
+def test_error_while_creating_log_file():
+    app = gui.PCMeter_GUI()
+
+    with patch("gui.PCMeter_GUI.create_log_file", return_value=int(0)):
+        with patch("tkinter.messagebox.showinfo") as mock_info:
+
+            file=app.create_log_file()
+            app.check_state_disc.set(1)
+            app.start_reading()
+
+            mock_info.assert_called_once_with(title="PCMeter", message="Readings stopped")
+
+
