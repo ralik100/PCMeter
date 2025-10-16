@@ -8,10 +8,16 @@ from unittest.mock import patch
 
 def test_missing_reading_check():
     app=gui.PCMeter_GUI()
-    with patch("tkinter.messagebox.showwarning") as mock_warning:
-        app.start_reading()
+    with patch("tkinter.messagebox.showwarning"):
+        result=app.any_readings_checked()
+        assert result==False
 
-        mock_warning.assert_called_once_with(title="PCMeter",message="No reading selected")
+def test_missing_reading_warning_message():
+    app=gui.PCMeter_GUI()
+    with patch("tkinter.messagebox.showwarning") as mock_warning:
+        result=app.any_readings_checked()
+        
+        mock_warning.assert_called_once_with(title="PCMeter", message="No reading selected")
 
 def test_custom_log_path_checked_but_no_path_given():
 

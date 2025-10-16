@@ -107,9 +107,7 @@ class PCMeter_GUI:
     def start_reading(self):
         #main reading function
 
-        if  not self.check_state_cpu.get() and not self.check_state_disc.get() and not self.check_state_gpu.get() and not self.check_state_ram.get():
-            self.no_reading_selected_warning="No reading selected"
-            self.show_warning(self.no_reading_selected_warning)
+        if not self.any_readings_checked():
             return
         
 
@@ -117,7 +115,7 @@ class PCMeter_GUI:
 
 
         #creating logfile
-        self.log_file=self.create_log_file()
+        log_file=self.create_log_file()
 
         
 
@@ -125,7 +123,7 @@ class PCMeter_GUI:
 
 
         #if creating log file went wrong, stop readings
-        if self.log_file==0:
+        if log_file==0:
             self.show_message("Readings stopped")
             return
 
@@ -133,13 +131,13 @@ class PCMeter_GUI:
 
         #clearing log file if checked
         if self.check_state_clear_log_file.get():
-            self.clear_log_file(self.log_file)
+            self.clear_log_file(log_file)
 
 
 
         #showing system info
         if self.check_state_sinfo.get():
-            self.print_to_log_file(log_file=self.log_file, message=fun.show_system_info())
+            self.print_to_log_file(log_file=log_file, message=fun.show_system_info())
 
 
 
@@ -147,7 +145,7 @@ class PCMeter_GUI:
 
 
         #list for checked readings, later necessary
-        self.checked_readings=[self.check_state_cpu.get(), self.check_state_gpu.get(), self.check_state_ram.get(), self.check_state_disc.get()]
+        checked_readings=[self.check_state_cpu.get(), self.check_state_gpu.get(), self.check_state_ram.get(), self.check_state_disc.get()]
 
 
 
@@ -173,7 +171,7 @@ class PCMeter_GUI:
 
         #without customized work time - designed to work once
         if  not self.check_state_wtime.get():
-            self.print_readings(self.checked_readings, self.log_file, self.cpu_time_interval)
+            self.print_readings(checked_readings, log_file, self.cpu_time_interval)
 
 
 
@@ -182,35 +180,25 @@ class PCMeter_GUI:
         #with customized work time
         elif self.check_state_wtime.get():
 
-            self.work_time=simpledialog.askinteger("","Enter custom work time duration in seconds")
-
-            if self.work_time==None or self.work_time<2:
-                self.show_warning("Custom work time should be more or equal 2")
-                return
-
-            #get reading time interval
-            if self.check_state_reading_interval.get():
-                self.reading_interval=simpledialog.askinteger("","Enter reading interval in seconds")
-
-            #reading time interval should be more or equal 1
-                if self.reading_interval<1:
-                    self.show_warning("Reading interval should be more or equal to 1 second")
-                    return
-                
-            
-            #if not customized - designed to work every second
-            else:
-                self.reading_interval=1
+            work_time=self.get_custom_work_time()
+            if not work_time:
+                self.log_close(log_file)
                     
+
+            if self.check_state_reading_interval.get():
+                reading_interval=self.get_custom_reading_interval()
+                if reading_interval==False:
+                    self.log_close(log_file)
+
+            else:
+                reading_interval=1
+
             #blocking bigger interval than worktime situation
-            if self.reading_interval>self.work_time:
+            if reading_interval>work_time:
                 self.show_warning("Reading interval should be less or equal to work time")
                 return
             
 
-            
-            #variable for timetracking
-            self.time_passed=0
 
 
             #main loop for readings with customized work time
@@ -219,22 +207,49 @@ class PCMeter_GUI:
             while True:
                 end=time.time()
                 time_passed=end-start
-                if time_passed>=self.work_time:
+                if time_passed>=work_time:
                     break
                 
-                self.print_readings(self.checked_readings, self.log_file, self.cpu_time_interval)
+                self.print_readings(checked_readings, log_file, self.cpu_time_interval)
 
-                time.sleep(self.reading_interval)
-            
-        else:
-            self.show_warning("Custom work time should be more or equal 2")
-            return
+                time.sleep(reading_interval)
 
            
                     
 
         #close logfile
-        self.log_close(self.log_file)
+        self.log_close(log_file)
+
+
+    def any_readings_checked(self):
+        if  not self.check_state_cpu.get() and not self.check_state_disc.get() and not self.check_state_gpu.get() and not self.check_state_ram.get():
+            self.no_reading_selected_warning="No reading selected"
+            self.show_warning(self.no_reading_selected_warning)
+            return False
+        return True
+
+    def get_custom_work_time(self):
+
+        work_time=simpledialog.askinteger("","Enter custom work time duration in seconds")
+
+        if work_time==None or work_time<2:
+                self.show_warning("Custom work time should be more or equal 2")
+                return False
+        
+        return work_time
+
+    def get_custom_reading_interval(self):
+            #get reading time interval
+
+        reading_interval=simpledialog.askinteger("","Enter reading interval in seconds")
+
+        #reading time interval should be more or equal 1
+        if reading_interval<1:
+            self.show_warning("Reading interval should be more or equal to 1 second")
+            return False
+        
+        return reading_interval
+
 
 
 
@@ -258,6 +273,7 @@ class PCMeter_GUI:
         if log_file:
             self.print_to_log_file(log_file, "Readings finished successfully!\n")
             log_file.close()
+        exit(0)
 
     def print_to_log_file(self,log_file, message):
         #basic log writing method
