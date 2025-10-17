@@ -3,7 +3,7 @@ from tkinter import simpledialog, messagebox
 import os
 import functions as fun
 import time
-
+import sys
 
 class PCMeter_GUI:
     
@@ -273,7 +273,7 @@ class PCMeter_GUI:
         if log_file:
             self.print_to_log_file(log_file, "Readings finished successfully!\n")
             log_file.close()
-        exit(0)
+        sys.exit(0)
 
     def print_to_log_file(self,log_file, message):
         #basic log writing method

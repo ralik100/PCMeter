@@ -90,9 +90,9 @@ def test_custom_log_file_path(tmp_path):
     expected = os.path.join(str(tmp_path), "log.txt")
     assert os.path.isfile(expected)
 
+@patch("sys.exit", lambda *a, **kw: None)
 def test_custom_work_time():
     app=gui.PCMeter_GUI()
-    
     
     with patch("tkinter.simpledialog.askinteger", return_value=int(4)):
         
@@ -147,6 +147,7 @@ def test_print_to_log_file(tmp_path):
             data=f.read()
             assert data=="Test Data"
 
+@patch("sys.exit", lambda *a, **kw: None)
 def test_log_file_close_end_message(tmp_path):
     app=gui.PCMeter_GUI()
     with patch("tkinter.simpledialog.askstring", return_value=str(tmp_path)):
