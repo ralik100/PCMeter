@@ -152,8 +152,6 @@ class PCMeter_GUI:
 
         #if work time not defined, it is defined to one iteration only
 
-        if self.check_state_wtime.get():
-            self.work_time=simpledialog.askinteger("","Enter custom work time duration in seconds")
         
 
 

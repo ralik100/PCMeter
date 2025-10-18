@@ -158,3 +158,19 @@ def test_log_file_close_end_message(tmp_path):
         with open(log_file_path, "r") as f:
             data=f.read()
             assert data=="Readings finished successfully!\n"
+
+def test_get_custom_work_time():
+    app=gui.PCMeter_GUI()
+    with patch("tkinter.simpledialog.askinteger", return_value=int(5)):
+        result=app.get_custom_work_time()
+
+        assert result==5
+
+def test_get_custom_reading_interval():
+    app=gui.PCMeter_GUI()
+
+    with patch("tkinter.simpledialog.askinteger", return_value=int(5)):
+        
+        result=app.get_custom_reading_interval()
+
+        assert result==5
