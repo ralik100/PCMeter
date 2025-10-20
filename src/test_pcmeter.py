@@ -174,3 +174,29 @@ def test_get_custom_reading_interval():
         result=app.get_custom_reading_interval()
 
         assert result==5
+
+def test_get_custom_cpu_clock_interval():
+    app=gui.PCMeter_GUI()
+
+    with patch("tkinter.simpledialog.askfloat", return_value=int(3)):
+        result=app.get_custom_cpu_clock_interval()
+
+        assert result==3
+
+
+@patch("sys.exit", lambda *a, **kw: None)
+def test_cpu_usage_work_time_via_gui():
+    app=gui.PCMeter_GUI()
+
+    with patch("tkinter.simpledialog.askfloat", return_value=int(3)):
+        app.check_state_cpu.set(1)
+
+        app.check_state_tinterval.set(1)
+
+        start=time.time()
+
+        app.start_reading()
+
+        end=time.time()
+        time_passed=end-start
+        assert 3.1>time_passed>2.9

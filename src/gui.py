@@ -158,18 +158,17 @@ class PCMeter_GUI:
 
         #getting interval for cpu reading
         if self.check_state_tinterval.get():
-            self.cpu_time_interval=simpledialog.askfloat("","Enter customized interval for CPU readings.")
-            if self.cpu_time_interval==None or self.cpu_time_interval<=0 :
-                self.show_warning("CPU reading interval should be more than 0!")
-                return
+            cpu_time_interval=self.get_custom_cpu_clock_interval()
+            if not cpu_time_interval:
+                self.log_close(log_file)
         else:
-            self.cpu_time_interval=1
+            cpu_time_interval=1
 
 
 
         #without customized work time - designed to work once
         if  not self.check_state_wtime.get():
-            self.print_readings(checked_readings, log_file, self.cpu_time_interval)
+            self.print_readings(checked_readings, log_file, cpu_time_interval)
 
 
 
@@ -208,7 +207,7 @@ class PCMeter_GUI:
                 if time_passed>=work_time:
                     break
                 
-                self.print_readings(checked_readings, log_file, self.cpu_time_interval)
+                self.print_readings(checked_readings, log_file, cpu_time_interval)
 
                 time.sleep(reading_interval)
 
@@ -226,6 +225,14 @@ class PCMeter_GUI:
             return False
         return True
 
+    def get_custom_cpu_clock_interval(self):
+        cpu_time_interval=simpledialog.askfloat("","Enter customized interval for CPU readings.")
+        if cpu_time_interval==None or cpu_time_interval<=0 :
+            self.show_warning("CPU reading interval should be more than 0!")
+            return False
+        
+        return cpu_time_interval
+
     def get_custom_work_time(self):
 
         work_time=simpledialog.askinteger("","Enter custom work time duration in seconds")
@@ -242,7 +249,7 @@ class PCMeter_GUI:
         reading_interval=simpledialog.askinteger("","Enter reading interval in seconds")
 
         #reading time interval should be more or equal 1
-        if reading_interval<1:
+        if reading_interval==None or reading_interval<1:
             self.show_warning("Reading interval should be more or equal to 1 second")
             return False
         

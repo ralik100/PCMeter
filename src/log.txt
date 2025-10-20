@@ -121,3 +121,16 @@ Readings finished successfully!
 2025-10-19 20:47:35.051554 ||| Disc usage: 32.1%.
 2025-10-19 20:47:37.055832 ||| Disc usage: 32.1%.
 Readings finished successfully!
+2025-10-20 18:45:15.330598 ||| Disc usage: 32.1%.
+2025-10-20 18:45:17.335447 ||| Disc usage: 32.1%.
+Readings finished successfully!
+2025-10-20 18:47:37.201984 ||| CPU usage: 1.7%.
+Readings finished successfully!
+2025-10-20 18:49:57.585490 ||| Disc usage: 32.1%.
+2025-10-20 18:49:59.590752 ||| Disc usage: 32.1%.
+Readings finished successfully!
+2025-10-20 18:50:01.063277 ||| CPU usage: 7.6%.
+Readings finished successfully!
+Readings finished successfully!
+Readings finished successfully!
+Readings finished successfully!
