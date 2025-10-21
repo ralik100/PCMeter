@@ -150,7 +150,6 @@ class PCMeter_GUI:
 
 
 
-        #if work time not defined, it is defined to one iteration only
 
         
 

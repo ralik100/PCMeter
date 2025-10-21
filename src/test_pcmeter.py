@@ -200,3 +200,18 @@ def test_cpu_usage_work_time_via_gui():
         end=time.time()
         time_passed=end-start
         assert 3.1>time_passed>2.9
+
+@patch("sys.exit", lambda *a, **kw: None)
+def test_custom_made_directory_created_by_function(tmp_path):
+    app=gui.PCMeter_GUI()
+
+    app.check_state_log.set(1)
+
+    with patch("tkinter.simpledialog.askstring", return_value=str(tmp_path / "Test")):
+        custom_log_file_path=tmp_path / "Test"
+
+        file=app.create_log_file()
+
+        assert os.path.exists(custom_log_file_path)
+
+        app.log_close(file)

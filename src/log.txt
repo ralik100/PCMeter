@@ -134,3 +134,8 @@ Readings finished successfully!
 Readings finished successfully!
 Readings finished successfully!
 Readings finished successfully!
+2025-10-21 21:43:00.619015 ||| Disc usage: 31.9%.
+2025-10-21 21:43:02.624330 ||| Disc usage: 31.9%.
+Readings finished successfully!
+2025-10-21 21:43:04.111788 ||| CPU usage: 1.3%.
+Readings finished successfully!
