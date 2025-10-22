@@ -4,9 +4,10 @@ import os
 import functions as fun
 import time
 import sys
+import pandas as pd
 
 class PCMeter_GUI:
-    
+
     def __init__(self):
         
         #main structure
@@ -87,6 +88,10 @@ class PCMeter_GUI:
         self.check_state_clear_log_file=tk.IntVar()
         self.checkbox_clear_log_file=tk.Checkbutton(self.checkbox_options_frame, text="clear log file if in the same path", font=("Arial",10), variable=self.check_state_clear_log_file)
         self.checkbox_clear_log_file.grid(row=1,column=1, sticky=tk.W+tk.E)
+
+        self.check_state_results_to_chart=tk.IntVar()
+        self.checkbox_results_to_chart=tk.Checkbutton(self.checkbox_options_frame, text="results to chart", font=("Arial",10), variable=self.check_state_results_to_chart)
+        self.checkbox_results_to_chart.grid(row=1,column=2, sticky=tk.W+tk.E)
 
         #options header
         self.options_header=tk.Label(self.root, text="Select your options", font=("Arial Black",15))
