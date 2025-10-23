@@ -4,7 +4,7 @@ import os
 import functions as fun
 import time
 import sys
-import pandas as pd
+import read as rd
 
 class PCMeter_GUI:
 
@@ -100,7 +100,7 @@ class PCMeter_GUI:
         self.checkbox_options_frame.pack(fill="x", padx=10, pady=10)
 
 
-        self.start_button=tk.Button(self.root, text="Start reading", font=("Arial Black",20), command=self.start_reading)
+        self.start_button=tk.Button(self.root, text="Start reading", font=("Arial Black",20), command=rd.start_reading)
         self.start_button.pack(padx=10, pady=50)
 
     
@@ -109,118 +109,6 @@ class PCMeter_GUI:
     def run(self):
         self.root.mainloop()
 
-    def start_reading(self):
-        #main reading function
-
-        if not self.any_readings_checked():
-            return
-        
-
-
-
-
-        #creating logfile
-        log_file=self.create_log_file()
-
-        
-
-
-
-
-        #if creating log file went wrong, stop readings
-        if log_file==0:
-            self.show_message("Readings stopped")
-            return
-
-
-
-        #clearing log file if checked
-        if self.check_state_clear_log_file.get():
-            self.clear_log_file(log_file)
-
-
-
-        #showing system info
-        if self.check_state_sinfo.get():
-            self.print_to_log_file(log_file=log_file, message=fun.show_system_info())
-
-
-
-
-
-
-        #list for checked readings, later necessary
-        checked_readings=[self.check_state_cpu.get(), self.check_state_gpu.get(), self.check_state_ram.get(), self.check_state_disc.get()]
-
-
-
-
-
-        
-
-
-
-        #getting interval for cpu reading
-        if self.check_state_tinterval.get():
-            cpu_time_interval=self.get_custom_cpu_clock_interval()
-            if not cpu_time_interval:
-                self.log_close(log_file)
-        else:
-            cpu_time_interval=1
-
-
-
-        #without customized work time - designed to work once
-        if  not self.check_state_wtime.get():
-            self.print_readings(checked_readings, log_file, cpu_time_interval)
-
-
-
-
-
-        #with customized work time
-        elif self.check_state_wtime.get():
-
-            work_time=self.get_custom_work_time()
-            if not work_time:
-                self.log_close(log_file)
-                    
-
-            if self.check_state_reading_interval.get():
-                reading_interval=self.get_custom_reading_interval()
-                if reading_interval==False:
-                    self.log_close(log_file)
-
-            else:
-                reading_interval=1
-
-            #blocking bigger interval than worktime situation
-            if reading_interval>work_time:
-                self.show_warning("Reading interval should be less or equal to work time")
-                return
-            
-
-
-
-            #main loop for readings with customized work time
-            start=time.time()
-            
-            while True:
-                end=time.time()
-                time_passed=end-start
-                if time_passed>=work_time:
-                    break
-                
-                self.print_readings(checked_readings, log_file, cpu_time_interval)
-
-                time.sleep(reading_interval)
-
-           
-                    
-
-        #close logfile
-        self.log_close(log_file)
-
 
     def any_readings_checked(self):
         if  not self.check_state_cpu.get() and not self.check_state_disc.get() and not self.check_state_gpu.get() and not self.check_state_ram.get():
@@ -228,99 +116,3 @@ class PCMeter_GUI:
             self.show_warning(self.no_reading_selected_warning)
             return False
         return True
-
-    def get_custom_cpu_clock_interval(self):
-        cpu_time_interval=simpledialog.askfloat("","Enter customized interval for CPU readings.")
-        if cpu_time_interval==None or cpu_time_interval<=0 :
-            self.show_warning("CPU reading interval should be more than 0!")
-            return False
-        
-        return cpu_time_interval
-
-    def get_custom_work_time(self):
-
-        work_time=simpledialog.askinteger("","Enter custom work time duration in seconds")
-
-        if work_time==None or work_time<2:
-                self.show_warning("Custom work time should be more or equal 2")
-                return False
-        
-        return work_time
-
-    def get_custom_reading_interval(self):
-            #get reading time interval
-
-        reading_interval=simpledialog.askinteger("","Enter reading interval in seconds")
-
-        #reading time interval should be more or equal 1
-        if reading_interval==None or reading_interval<1:
-            self.show_warning("Reading interval should be more or equal to 1 second")
-            return False
-        
-        return reading_interval
-
-
-
-
-    #basic function for printing readings to log file
-    def print_readings(self, readings, log_file, cpu_interval):
-
-
-        functions=[fun.cpu_usage(cpu_interval), fun.gpu_usage(), fun.ram_usage(), fun.disc_usage()]
-        for i in range(4):
-            if readings[i]==1:
-                x=functions[i]
-                y=x
-                self.print_to_log_file(log_file, str(y)+"\n")
-
-
-    def clear_log_file(self, log_file):
-        log_file.seek(0)
-        log_file.truncate()
-
-    def log_close(self, log_file):
-        if log_file:
-            self.print_to_log_file(log_file, "Readings finished successfully!\n")
-            log_file.close()
-        sys.exit(0)
-
-    def print_to_log_file(self,log_file, message):
-        #basic log writing method
-
-        log_file.write(message)
-
-
-
-
-
-    def create_log_file(self):
-        if self.check_state_log.get() == 1:
-            self.custom_path = simpledialog.askstring("", "Enter custom log file path")
-
-            if self.custom_path:
-                self.log_file_path = os.path.join(self.custom_path, "log.txt")
-
-                os.makedirs(self.custom_path, exist_ok=True)
-
-                return open(self.log_file_path, "a")
-            else:
-                self.custom_path_checked_but_no_info = "Custom path checked but no path given"
-                self.show_warning(self.custom_path_checked_but_no_info)
-                return None
-
-        elif self.check_state_log.get() == 0:
-            self.log_file_path = "log.txt"
-            return open(self.log_file_path, "a")
-
-
-
-    def show_message(self, message):
-        #function used for showing info
-        messagebox.showinfo(title="PCMeter", message=message)
-
-
-
-
-    def show_warning(self, warning):
-        #function used for showing warnings
-        messagebox.showwarning(title="PCMeter", message=warning)
