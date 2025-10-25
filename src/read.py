@@ -1,9 +1,14 @@
 import functions as fun
+import log_manager as logger
+import checker
+import popup
+import get_values as getter
+import time
 
 def start_reading(self):
         #main reading function
 
-        if not self.any_readings_checked():
+        if not checker.any_readings_checked():
             return
         
 
@@ -11,7 +16,7 @@ def start_reading(self):
 
 
         #creating logfile
-        log_file=self.create_log_file()
+        log_file=logger.create_log_file()
 
         
 
@@ -20,20 +25,20 @@ def start_reading(self):
 
         #if creating log file went wrong, stop readings
         if log_file==0:
-            self.show_message("Readings stopped")
+            popup.show_message("Readings stopped")
             return
 
 
 
         #clearing log file if checked
-        if self.check_state_clear_log_file.get():
-            self.clear_log_file(log_file)
+        if checker.check_state_clear_log_file.get():
+            logger.clear_log_file(log_file)
 
 
 
         #showing system info
-        if self.check_state_sinfo.get():
-            self.print_to_log_file(log_file=log_file, message=fun.show_system_info())
+        if checker.check_state_sinfo.get():
+            logger.print_to_log_file(log_file=log_file, message=fun.show_system_info())
 
 
 
@@ -41,7 +46,7 @@ def start_reading(self):
 
 
         #list for checked readings, later necessary
-        checked_readings=[self.check_state_cpu.get(), self.check_state_gpu.get(), self.check_state_ram.get(), self.check_state_disc.get()]
+        checked_readings=[checker.check_state_cpu.get(), checker.check_state_gpu.get(), checker.check_state_ram.get(), checker.check_state_disc.get()]
 
 
 
@@ -52,10 +57,10 @@ def start_reading(self):
 
 
         #getting interval for cpu reading
-        if self.check_state_tinterval.get():
-            cpu_time_interval=self.get_custom_cpu_clock_interval()
+        if checker.check_state_tinterval.get():
+            cpu_time_interval=getter.get_custom_cpu_clock_interval()
             if not cpu_time_interval:
-                self.log_close(log_file)
+                logger.log_close(log_file)
         else:
             cpu_time_interval=1
 
@@ -88,7 +93,7 @@ def start_reading(self):
             #blocking bigger interval than worktime situation
             if reading_interval>work_time:
                 self.show_warning("Reading interval should be less or equal to work time")
-                return
+                return    
             
 
 
