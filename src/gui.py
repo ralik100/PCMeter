@@ -1,4 +1,5 @@
 import tkinter as tk
+import read as rd
 
 
 class PCMeter_GUI:
@@ -103,3 +104,38 @@ class PCMeter_GUI:
 
     def run(self):
         self.root.mainloop()
+
+    
+    def get_cpu_check_state(self):
+        return self.check_state_cpu.get()
+    
+    def get_disc_check_state(self):
+        return self.check_state_disc.get()
+    
+    def get_ram_check_state(self):
+        return self.check_state_ram.get()
+    
+    def get_gpu_check_state(self):
+        return self.check_state_gpu.get()
+    
+    def get_custom_log_path_check_state(self):
+        return self.check_state_log.get()
+    
+    def get_system_info_check_state(self):
+        return self.check_state_sinfo.get()
+    
+    def get_cpu_custom_clock_interval_check_state(self):
+        return self.check_state_tinterval.get()
+    
+    def get_custom_work_time_check_state(self):
+        return self.check_state_wtime.get()
+    
+    def get_custom_reading_interval_check_state(self):
+        return self.check_state_reading_interval.get()
+    
+    def get_log_clear_check_state(self):
+        return self.check_state_clear_log_file.get()
+    
+    def get_data_to_charts_check_state(self):
+        return self.check_state_results_to_chart.get()
+        
