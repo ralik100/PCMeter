@@ -1,9 +1,11 @@
 import gui
 import functions as fun
 import time
+import popup
 import io
 import os
 from unittest.mock import patch
+
 
 
 def test_cpu_usage():
@@ -123,14 +125,14 @@ def test_clear_log_file(tmp_path):
 def test_show_message():
     app=gui.PCMeter_GUI()
     with patch("tkinter.messagebox.showinfo") as mock_message:
-        app.show_message("Test data")
+        popup.show_message("Test data")
 
         mock_message.assert_called_once_with(title="PCMeter", message="Test data")
 
 def test_show_warning():
     app=gui.PCMeter_GUI()
     with patch("tkinter.messagebox.showwarning") as mock_message:
-        app.show_warning("Test data")
+        popup.show_warning("Test data")
 
         mock_message.assert_called_once_with(title="PCMeter", message="Test data")
 

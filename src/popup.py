@@ -1,13 +1,13 @@
 from tkinter import messagebox
 
 
-def show_message(self, message):
+def show_message(message):
         #function used for showing info
         messagebox.showinfo(title="PCMeter", message=message)
 
 
 
 
-def show_warning(self, warning):
+def show_warning(warning):
         #function used for showing warnings
         messagebox.showwarning(title="PCMeter", message=warning)

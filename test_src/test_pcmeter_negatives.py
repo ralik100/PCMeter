@@ -1,5 +1,6 @@
 import gui
 import functions as fun
+import checker
 import time
 import io
 import os
@@ -8,8 +9,9 @@ from unittest.mock import patch
 
 def test_missing_reading_check():
     app=gui.PCMeter_GUI()
-    with patch("tkinter.messagebox.showwarning"):
-        result=app.any_readings_checked()
+    with patch("tkinter.messagebox.showwarning") as mock_warning:
+        no_reading_checked=[0,0,0,0]
+        result=checker.any_readings_checked(no_reading_checked)
         assert result==False
 
 def test_missing_reading_warning_message():
