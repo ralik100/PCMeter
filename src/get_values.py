@@ -1,7 +1,7 @@
 from tkinter import simpledialog
 import popup
 
-def get_custom_cpu_clock_interval(self):
+def get_custom_cpu_clock_interval():
         cpu_time_interval=simpledialog.askfloat("","Enter customized interval for CPU readings.")
         if cpu_time_interval==None or cpu_time_interval<=0 :
             popup.show_warning("CPU reading interval should be more than 0!")
@@ -9,7 +9,7 @@ def get_custom_cpu_clock_interval(self):
         
         return cpu_time_interval
 
-def get_custom_work_time(self):
+def get_custom_work_time():
 
         work_time=simpledialog.askinteger("","Enter custom work time duration in seconds")
 
@@ -19,7 +19,7 @@ def get_custom_work_time(self):
         
         return work_time
 
-def get_custom_reading_interval(self):
+def get_custom_reading_interval():
             #get reading time interval
 
         reading_interval=simpledialog.askinteger("","Enter reading interval in seconds")

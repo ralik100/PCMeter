@@ -96,7 +96,7 @@ class PCMeter_GUI:
         self.checkbox_options_frame.pack(fill="x", padx=10, pady=10)
 
 
-        self.start_button=tk.Button(self.root, text="Start reading", font=("Arial Black",20), command=rd.start_reading)
+        self.start_button=tk.Button(self.root, text="Start reading", font=("Arial Black",20), command=lambda: rd.start_reading(self))
         self.start_button.pack(padx=10, pady=50)
 
     
