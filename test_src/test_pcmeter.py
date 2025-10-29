@@ -2,6 +2,9 @@ import gui
 import functions as fun
 import time
 import popup
+import log_manager as logger
+import read
+import get_values as getter
 import io
 import os
 from unittest.mock import patch
@@ -76,7 +79,7 @@ def test_cpu_usage_work_time():
 
 def test_gui_creating_log_file():
     app=gui.PCMeter_GUI()
-    file=app.create_log_file()
+    file=logger.create_log_file(0)
     file.close()
     assert isinstance(file, io.TextIOWrapper)
     
@@ -86,7 +89,7 @@ def test_custom_log_file_path(tmp_path):
     app=gui.PCMeter_GUI()
     app.check_state_log.set(1)
     with patch("tkinter.simpledialog.askstring", return_value=str(tmp_path)):
-        file=app.create_log_file()
+        file=logger.create_log_file(1)
         file.close()
     
     expected = os.path.join(str(tmp_path), "log.txt")
@@ -101,7 +104,7 @@ def test_custom_work_time():
         app.check_state_wtime.set(1)
         app.check_state_disc.set(1)
         start=time.perf_counter()
-        app.start_reading()
+        read.start_reading(app)
         end=time.perf_counter()    
     time_passed=end-start
     
@@ -112,14 +115,14 @@ def test_clear_log_file(tmp_path):
     app=gui.PCMeter_GUI()
     app.check_state_log.set(1)
     with patch("tkinter.simpledialog.askstring", return_value=str(tmp_path)):
-        file=app.create_log_file()
+        file=logger.create_log_file(1)
 
     file.write("Test_message")
     
-    app.clear_log_file(file)
+    logger.clear_log_file(file)
     file.close()
 
-    assert os.path.getsize(app.log_file_path)==0
+    assert os.path.getsize(tmp_path / "log.txt")==0
 
 
 def test_show_message():
@@ -140,9 +143,9 @@ def test_show_warning():
 def test_print_to_log_file(tmp_path):
     app=gui.PCMeter_GUI()
     with patch("tkinter.simpledialog.askstring", return_value=str(tmp_path)):
-        app.check_state_log.set(1)
-        file=app.create_log_file()
-        app.print_to_log_file(file, "Test Data")
+        
+        file=logger.create_log_file(1)
+        logger.print_to_log_file(file, "Test Data")
         file.close()
         log_file_path=tmp_path / "log.txt"
         with open(log_file_path, "r") as f:
@@ -153,9 +156,9 @@ def test_print_to_log_file(tmp_path):
 def test_log_file_close_end_message(tmp_path):
     app=gui.PCMeter_GUI()
     with patch("tkinter.simpledialog.askstring", return_value=str(tmp_path)):
-        app.check_state_log.set(1)
-        file=app.create_log_file()
-        app.log_close(file)
+        
+        file=logger.create_log_file(1)
+        logger.log_close(file)
         log_file_path=tmp_path / "log.txt"
         with open(log_file_path, "r") as f:
             data=f.read()
@@ -164,7 +167,7 @@ def test_log_file_close_end_message(tmp_path):
 def test_get_custom_work_time():
     app=gui.PCMeter_GUI()
     with patch("tkinter.simpledialog.askinteger", return_value=int(5)):
-        result=app.get_custom_work_time()
+        result=getter.get_custom_work_time()
 
         assert result==5
 
@@ -173,7 +176,7 @@ def test_get_custom_reading_interval():
 
     with patch("tkinter.simpledialog.askinteger", return_value=int(5)):
         
-        result=app.get_custom_reading_interval()
+        result=getter.get_custom_reading_interval()
 
         assert result==5
 
@@ -181,7 +184,7 @@ def test_get_custom_cpu_clock_interval():
     app=gui.PCMeter_GUI()
 
     with patch("tkinter.simpledialog.askfloat", return_value=int(3)):
-        result=app.get_custom_cpu_clock_interval()
+        result=getter.get_custom_cpu_clock_interval()
 
         assert result==3
 
@@ -197,7 +200,7 @@ def test_cpu_usage_work_time_via_gui():
 
         start=time.time()
 
-        app.start_reading()
+        read.start_reading(app)
 
         end=time.time()
         time_passed=end-start
@@ -212,8 +215,8 @@ def test_custom_made_directory_created_by_function(tmp_path):
     with patch("tkinter.simpledialog.askstring", return_value=str(tmp_path / "Test")):
         custom_log_file_path=tmp_path / "Test"
 
-        file=app.create_log_file()
+        file=logger.create_log_file(1)
 
         assert os.path.exists(custom_log_file_path)
 
-        app.log_close(file)
+        logger.log_close(file)
