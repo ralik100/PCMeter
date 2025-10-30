@@ -118,3 +118,5 @@ def start_reading(app):
 
         #close logfile
         logger.log_close(log_file)
+
+        
