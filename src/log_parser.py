@@ -5,8 +5,10 @@ def log_parser(log_file_path):
     with open(log_file_path,"r") as f:
         for line in f:
             line.strip()
-            usage=re.search("^:*%$",line)
-            print(usage)
+            res=re.search(r"CPU usage:\s*([0-9.]+)%", line)
+            if res:
+                usage=float(res.group(1))
+                print(usage)
 
 
 
