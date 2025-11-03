@@ -1,3 +1,6 @@
 2025-10-30 18:07:16.668937 ||| System information: file system=Windows ||| version=10.0.19045 ||| CPU=AMD64 Family 23 Model 113 Stepping 0, AuthenticAMD ||| total RAM=17125937152 ||| total disc=sdiskusage(total=255395442688, used=78826180608, free=176569262080, percent=30.9).
 2025-10-30 18:07:16.740220 ||| CPU usage: 0.8%.
+2025-10-30 18:07:16.740220 ||| CPU usage: 2.5%.
+2025-10-30 18:07:16.740220 ||| CPU usage: 10.0%.
+2025-10-30 18:07:16.740220 ||| CPU usage: 3%.
 Readings finished successfully!
