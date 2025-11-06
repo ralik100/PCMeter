@@ -12,7 +12,11 @@ def log_parser(log_file_path):
                 timestamp=str(log_timestamp.group(1))
                 metric=words[3]
                 usage=get_usage(line,metric)
-                print(f"{metric}, {usage}")
+                if usage:
+                    result.append({"Metric": metric, "Usage": usage, "Time":timestamp})
+                else:
+                    continue
+        return result
 
 def get_usage(line, metric):
     match metric:
@@ -30,5 +34,3 @@ def get_usage(line, metric):
             return float(res.group(1))
         case _:
             pass
-
-log_parser("log.txt")
