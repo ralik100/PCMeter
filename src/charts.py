@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 
 
-def to_chart():
+def to_chart(log_file_path):
     plt.style.use("seaborn-v0_8")
     data=log_parser.log_parser("log.txt")
 
