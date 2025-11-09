@@ -6,13 +6,17 @@ import matplotlib.pyplot as plt
 
 def to_chart(log_file_path):
     plt.style.use("seaborn-v0_8")
-    data=log_parser.log_parser("log.txt")
+    data=log_parser.log_parser(log_file_path)
 
     df=pd.DataFrame(data)
+    print(df.columns)
+    print(df.head())
     df["Time"]=pd.to_datetime(df["Time"])
-    print(df)
+    
+    df_wide = df.pivot(index="Time", columns="Metric", values="Usage")
     df.set_index("Time", inplace=True)
-    df_wide = df.pivot(index="Time", columns="metric", values="usage")
+    
+
     df_wide.plot()
 
     plt.title("Usage", fontsize=20)
@@ -26,5 +30,5 @@ def to_chart(log_file_path):
     plt.show()
 
 
-to_chart()
+to_chart("log.txt")
 

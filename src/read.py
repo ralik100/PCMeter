@@ -5,7 +5,7 @@ import gui
 import popup
 import get_values as getter
 import time
-import chart
+import charts
 
 def start_reading(app):
         #main reading function
@@ -119,8 +119,8 @@ def start_reading(app):
 
         #close logfile
         logger.log_close(log_file)
-
-	if gui.get_data_to_charts_check_state(app):
-		charts.to_chart()
+        
+        if gui.get_data_to_charts_check_state(app):
+            charts.to_chart(log_file)
 
         
