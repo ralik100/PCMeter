@@ -8,11 +8,12 @@ def clear_log_file(log_file):
         log_file.seek(0)
         log_file.truncate()
 
-def log_close(log_file):
+def log_close(log_file, exit):
         if log_file:
             print_to_log_file(log_file, "Readings finished successfully!\n")
             log_file.close()
-        sys.exit(0)
+        if exit:
+            sys.exit(0)
 
 def create_log_file(log_check_state):
         if log_check_state:
@@ -23,7 +24,7 @@ def create_log_file(log_check_state):
 
                 os.makedirs(custom_path, exist_ok=True)
 
-                return open(log_file_path, "a")
+        
             else:
                 custom_path_checked_but_no_info = "Custom path checked but no path given"
                 popup.show_warning(custom_path_checked_but_no_info)
@@ -31,7 +32,8 @@ def create_log_file(log_check_state):
 
         elif log_check_state == 0:
             log_file_path = "log.txt"
-            return open(log_file_path, "a")
+        
+        return log_file_path
         
 
     #basic function for printing readings to log file

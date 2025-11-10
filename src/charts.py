@@ -9,8 +9,7 @@ def to_chart(log_file_path):
     data=log_parser.log_parser(log_file_path)
 
     df=pd.DataFrame(data)
-    print(df.columns)
-    print(df.head())
+
     df["Time"]=pd.to_datetime(df["Time"])
     
     df_wide = df.pivot(index="Time", columns="Metric", values="Usage")
@@ -28,7 +27,4 @@ def to_chart(log_file_path):
 
     plt.xticks(rotation=45)
     plt.show()
-
-
-to_chart("log.txt")
 

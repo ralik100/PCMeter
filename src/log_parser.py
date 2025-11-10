@@ -2,7 +2,8 @@ import re
 
 def log_parser(log_file_path):
     result=[]
-    with open(log_file_path,"r") as f:
+    f=open(log_file_path, "r")
+    if f:
         for line in f:
             line.strip()
             log_timestamp=re.search(r"(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d+)", line)

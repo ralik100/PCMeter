@@ -26,7 +26,10 @@ def start_reading(app):
 
 
         #creating logfile
-        log_file=logger.create_log_file(app.get_custom_log_path_check_state())
+        log_file_path = logger.create_log_file(app.get_custom_log_path_check_state())
+        print(log_file_path)
+
+        log_file=open(log_file_path, "a")
 
         
 
@@ -63,7 +66,8 @@ def start_reading(app):
         if app.get_cpu_custom_clock_interval_check_state():
             cpu_time_interval=getter.get_custom_cpu_clock_interval()
             if not cpu_time_interval:
-                logger.log_close(log_file)
+                logger.log_close(log_file, False)
+                return
         else:
             cpu_time_interval=1
 
@@ -82,13 +86,15 @@ def start_reading(app):
 
             work_time=getter.get_custom_work_time()
             if not work_time:
-                logger.log_close(log_file)
+                logger.log_close(log_file, False)
+                return
                     
 
             if  app.get_custom_reading_interval_check_state():
                 reading_interval=getter.get_custom_reading_interval()
                 if reading_interval==False:
-                    logger.log_close(log_file)
+                    logger.log_close(log_file, False)
+                    return
 
             else:
                 reading_interval=1
@@ -117,10 +123,10 @@ def start_reading(app):
            
                     
 
-        #close logfile
-        logger.log_close(log_file)
+        logger.log_close(log_file, False)
         
-        if gui.get_data_to_charts_check_state(app):
-            charts.to_chart(log_file)
+        if app.get_data_to_charts_check_state():
+            charts.to_chart(log_file_path)
 
+        #close logfile
         
